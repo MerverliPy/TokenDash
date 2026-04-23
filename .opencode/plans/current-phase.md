@@ -2,7 +2,7 @@
 
 ## Phase
 - id: backend-foundation
-- status: in_progress
+- status: completed
 
 ## Goal
 Create the backend runtime, health route, and workflow route scaffold for TokenDash.

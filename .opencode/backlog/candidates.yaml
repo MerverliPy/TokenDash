@@ -50,7 +50,7 @@ candidates:
   - id: backend-foundation
     title: Create backend foundation and dev-only workflow routes
     priority: 90
-    status: in_progress
+    status: completed
     summary: Add the base backend runtime and dev-only workflow API surface.
     depends_on:
       - opencode-command-skeleton

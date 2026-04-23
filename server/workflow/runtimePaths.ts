@@ -2,7 +2,13 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 export function getProjectRoot(): string {
-  return path.resolve(path.dirname(new URL(import.meta.url).pathname), '..', '..')
+  const candidateRoot = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..', '..')
+
+  if (path.basename(candidateRoot) === 'dist') {
+    return path.dirname(candidateRoot)
+  }
+
+  return candidateRoot
 }
 
 export function getWorkflowPaths() {
