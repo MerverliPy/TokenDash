@@ -1,0 +1,280 @@
+candidates:
+  - id: workflow-bootstrap
+    title: Bootstrap workflow metadata and contracts
+    priority: 100
+    status: completed
+    summary: Create the initial repo workflow rules, current phase state, backlog, and runtime workflow contract files.
+    depends_on: []
+    allowed_files:
+      - AGENTS.md
+      - .opencode/AGENTS.md
+      - .opencode/backlog/candidates.yaml
+      - .opencode/plans/current-phase.md
+      - server/workflow/contracts.ts
+      - server/workflow/phaseCatalog.ts
+      - server/workflow/mcpPolicy.ts
+    required_mcps: []
+    acceptance:
+      - Root and internal workflow rules exist
+      - Backlog exists with bounded TokenDash phases
+      - Current phase exists and points at workflow-bootstrap
+      - Runtime workflow contracts, phase catalog, and MCP policy exist
+    validation:
+      - test -f AGENTS.md
+      - test -f .opencode/AGENTS.md
+      - test -f .opencode/backlog/candidates.yaml
+      - test -f .opencode/plans/current-phase.md
+      - test -f server/workflow/contracts.ts
+      - test -f server/workflow/phaseCatalog.ts
+      - test -f server/workflow/mcpPolicy.ts
+
+  - id: opencode-command-skeleton
+    title: Add opencode agents, commands, and workflow scripts
+    priority: 95
+    status: completed
+    summary: Create the TokenDash opencode control surface and repo-owned workflow scripts.
+    depends_on:
+      - workflow-bootstrap
+    allowed_files:
+      - .opencode/agents/*.md
+      - .opencode/commands/*.md
+      - scripts/dev/*
+    required_mcps: []
+    acceptance:
+      - agent files exist
+      - command files exist
+      - workflow scripts exist
+    validation:
+      - bash scripts/dev/workflow-check.sh
+
+  - id: backend-foundation
+    title: Create backend foundation and dev-only workflow routes
+    priority: 90
+    status: in_progress
+    summary: Add the base backend runtime and dev-only workflow API surface.
+    depends_on:
+      - opencode-command-skeleton
+    allowed_files:
+      - package.json
+      - tsconfig.json
+      - server/index.ts
+      - server/routes/*.ts
+      - server/workflow/*.ts
+    required_mcps:
+      - context7
+    acceptance:
+      - backend starts
+      - health route works
+      - workflow routes are mounted
+    validation:
+      - npm run typecheck
+      - npm run build
+
+  - id: frontend-shell
+    title: Create the mobile-first frontend shell
+    priority: 85
+    status: pending
+    summary: Add the base React shell and responsive dashboard layout.
+    depends_on:
+      - backend-foundation
+    allowed_files:
+      - src/**
+      - index.html
+      - vite.config.ts
+      - tailwind.config.ts
+      - postcss.config.js
+    required_mcps:
+      - context7
+      - playwright
+    acceptance:
+      - dashboard shell renders
+      - mobile layout is usable
+    validation:
+      - npm run typecheck
+      - npm run build
+
+  - id: analyzer-api
+    title: Wire analyzer execution through the backend
+    priority: 80
+    status: pending
+    summary: Add analyze API contracts, spawn logic, and frontend API client wiring.
+    depends_on:
+      - frontend-shell
+    allowed_files:
+      - server/lib/*.ts
+      - server/routes/analyze.ts
+      - src/lib/*.ts
+      - src/pages/DashboardPage.tsx
+    required_mcps:
+      - context7
+    acceptance:
+      - analyzer can be run via API
+      - parsed JSON is returned
+    validation:
+      - npm run typecheck
+      - npm run build
+
+  - id: run-controls-and-summary
+    title: Add manual run controls and summary views
+    priority: 75
+    status: pending
+    summary: Add run controls, summary cards, and top-level metrics.
+    depends_on:
+      - analyzer-api
+    allowed_files:
+      - src/components/*.tsx
+      - src/pages/DashboardPage.tsx
+      - src/lib/*.ts
+    required_mcps:
+      - context7
+      - playwright
+    acceptance:
+      - manual run works from UI
+      - summary cards populate
+    validation:
+      - npm run typecheck
+      - npm run build
+
+  - id: charts-and-detail-views
+    title: Add charts, model table, bundles, and workflow file views
+    priority: 70
+    status: pending
+    summary: Add responsive charts and detailed data views.
+    depends_on:
+      - run-controls-and-summary
+    allowed_files:
+      - src/components/*.tsx
+      - src/lib/*.ts
+      - src/styles.css
+    required_mcps:
+      - context7
+      - playwright
+    acceptance:
+      - charts render
+      - tables are readable on mobile
+    validation:
+      - npm run typecheck
+      - npm run build
+
+  - id: local-run-history
+    title: Add local run history persistence
+    priority: 65
+    status: pending
+    summary: Persist runs locally and reopen them later.
+    depends_on:
+      - charts-and-detail-views
+    allowed_files:
+      - server/lib/*.ts
+      - server/routes/history.ts
+      - src/components/*.tsx
+      - src/lib/*.ts
+    required_mcps:
+      - playwright
+    acceptance:
+      - runs save locally
+      - runs reopen from history
+    validation:
+      - npm run typecheck
+      - npm run build
+
+  - id: comparison-and-warnings
+    title: Add comparison and workflow warnings
+    priority: 60
+    status: pending
+    summary: Compare saved runs and surface analyzer limitations and path drift.
+    depends_on:
+      - local-run-history
+    allowed_files:
+      - server/lib/*.ts
+      - src/components/*.tsx
+      - src/lib/*.ts
+    required_mcps:
+      - playwright
+    acceptance:
+      - comparison works
+      - warnings render clearly
+    validation:
+      - npm run typecheck
+      - npm run build
+
+  - id: pwa-setup
+    title: Add PWA manifest, service worker, and install flows
+    priority: 55
+    status: pending
+    summary: Make TokenDash installable with shell-only offline support.
+    depends_on:
+      - comparison-and-warnings
+    allowed_files:
+      - package.json
+      - vite.config.ts
+      - public/*
+      - src/components/*.tsx
+      - src/main.tsx
+      - src/App.tsx
+    required_mcps:
+      - context7
+      - playwright
+    acceptance:
+      - manifest exists
+      - service worker exists
+      - install prompt is wired
+    validation:
+      - npm run typecheck
+      - npm run build
+
+  - id: mobile-pwa-polish
+    title: Polish the installed mobile PWA experience
+    priority: 50
+    status: pending
+    summary: Improve touch targets, standalone layout, and small-screen readability.
+    depends_on:
+      - pwa-setup
+    allowed_files:
+      - src/**
+      - README.md
+    required_mcps:
+      - playwright
+    acceptance:
+      - mobile standalone layout is usable
+      - no critical overflow issues
+    validation:
+      - npm run typecheck
+      - npm run build
+
+  - id: token-tools-path-cleanup
+    title: Fix moved token-tools path references
+    priority: 45
+    status: pending
+    summary: Update moved token-tools docs and self-test references outside TokenDash.
+    depends_on:
+      - mobile-pwa-polish
+    allowed_files:
+      - /home/calvin/session-artifacts-2026-04-22/token-tools/agent-workflow-token-consumption-explained.md
+      - /home/calvin/session-artifacts-2026-04-22/token-tools/agent-workflow-token-consumption-selftest.mjs
+      - /home/calvin/session-artifacts-2026-04-22/token-tools/agent-workflow-token-consumption-selftest-explained.md
+    required_mcps: []
+    acceptance:
+      - moved paths are corrected
+      - self-test points to the moved analyzer
+    validation:
+      - node /home/calvin/session-artifacts-2026-04-22/token-tools/agent-workflow-token-consumption-selftest.mjs
+
+  - id: selftest-integration
+    title: Add self-test integration to TokenDash
+    priority: 40
+    status: pending
+    summary: Add a dev-only self-test route and UI hook.
+    depends_on:
+      - token-tools-path-cleanup
+    allowed_files:
+      - server/lib/*.ts
+      - server/routes/selftest.ts
+      - src/components/*.tsx
+      - src/pages/DashboardPage.tsx
+    required_mcps:
+      - playwright
+    acceptance:
+      - self-test can be triggered from TokenDash
+    validation:
+      - npm run typecheck
+      - npm run build
