@@ -73,11 +73,14 @@ candidates:
   - id: frontend-shell
     title: Create the mobile-first frontend shell
     priority: 85
-    status: pending
+    status: in_progress
     summary: Add the base React shell and responsive dashboard layout.
     depends_on:
       - backend-foundation
     allowed_files:
+      - package.json
+      - package-lock.json
+      - tsconfig.json
       - src/**
       - index.html
       - vite.config.ts

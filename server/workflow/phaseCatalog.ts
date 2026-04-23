@@ -77,7 +77,7 @@ export const PHASE_CATALOG: Record<PhaseId, WorkflowPhaseDefinition> = {
     title: 'Create frontend shell',
     goal: 'Create the responsive React shell for TokenDash.',
     dependsOn: ['backend-foundation'],
-    allowedFiles: ['src/**', 'index.html', 'vite.config.ts', 'tailwind.config.ts', 'postcss.config.js'],
+    allowedFiles: ['package.json', 'package-lock.json', 'tsconfig.json', 'src/**', 'index.html', 'vite.config.ts', 'tailwind.config.ts', 'postcss.config.js'],
     requiredMcps: ['context7', 'playwright'],
     validations: [
       { label: 'Typecheck', command: 'npm run typecheck' },
