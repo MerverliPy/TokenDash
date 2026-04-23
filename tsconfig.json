@@ -1,17 +1,21 @@
 {
   "compilerOptions": {
     "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "strict": true,
+    "jsx": "react-jsx",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "rootDir": ".",
     "outDir": "dist",
-    "types": ["node"]
+    "types": ["node", "vite/client"]
   },
   "include": [
-    "server/**/*.ts"
+    "server/**/*.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx"
   ]
 }

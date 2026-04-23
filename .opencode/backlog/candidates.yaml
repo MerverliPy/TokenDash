@@ -73,7 +73,7 @@ candidates:
   - id: frontend-shell
     title: Create the mobile-first frontend shell
     priority: 85
-    status: in_progress
+    status: completed
     summary: Add the base React shell and responsive dashboard layout.
     depends_on:
       - backend-foundation

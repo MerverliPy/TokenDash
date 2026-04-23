@@ -2,7 +2,7 @@
 
 ## Phase
 - id: frontend-shell
-- status: in_progress
+- status: completed
 
 ## Goal
 Create the mobile-first frontend shell for TokenDash.
