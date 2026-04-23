@@ -93,7 +93,17 @@ export const PHASE_CATALOG: Record<PhaseId, WorkflowPhaseDefinition> = {
     title: 'Wire analyzer API',
     goal: 'Add analyze API contracts, spawn logic, and client API wiring.',
     dependsOn: ['frontend-shell'],
-    allowedFiles: ['server/lib/*.ts', 'server/routes/analyze.ts', 'src/lib/*.ts', 'src/pages/DashboardPage.tsx'],
+    allowedFiles: [
+      '.opencode/backlog/candidates.yaml',
+      '.opencode/plans/current-phase.md',
+      'server/workflow/phaseCatalog.ts',
+      'server/index.ts',
+      'server/lib/*.ts',
+      'server/routes/analyze.ts',
+      'src/App.tsx',
+      'src/lib/*.ts',
+      'src/pages/DashboardPage.tsx',
+    ],
     requiredMcps: ['context7'],
     validations: [
       { label: 'Typecheck', command: 'npm run typecheck' },

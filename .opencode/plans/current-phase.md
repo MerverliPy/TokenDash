@@ -1,44 +1,45 @@
 # Current Phase
 
 ## Phase
-- id: frontend-shell
+- id: analyzer-api
 - status: completed
 
 ## Goal
-Create the mobile-first frontend shell for TokenDash.
+Wire analyzer execution through the backend and expose the parsed result to the frontend.
 
 ## In Scope
-- create the base React shell
-- create a responsive dashboard layout
-- establish the frontend entrypoint and app structure needed for the shell
-- keep the initial mobile-first shell bounded to the phase allowlist
+- reconcile analyzer-api workflow metadata across active workflow sources
+- add analyze API contracts and backend spawn logic
+- add the backend analyze route and mount it from `server/index.ts`
+- wire the frontend API client to call the analyze endpoint
+- render the dashboard analyzer flow from `src/App.tsx` and `src/pages/DashboardPage.tsx`
+- keep all work bounded to the phase allowlist
 
 ## Out Of Scope
-- backend analyzer execution
-- run controls and summaries
+- manual run controls and summary cards beyond analyzer wiring
 - charts and detail views
-- run history
+- local run history
 - comparison and warnings
-- PWA setup
-- token-tools cleanup
+- PWA setup and mobile PWA polish
+- token-tools cleanup and self-test integration
 
 ## Allowed Files
-- package.json
-- package-lock.json
-- tsconfig.json
-- src/**
-- index.html
-- vite.config.ts
-- tailwind.config.ts
-- postcss.config.js
+- .opencode/backlog/candidates.yaml
+- .opencode/plans/current-phase.md
+- server/workflow/phaseCatalog.ts
+- server/index.ts
+- server/lib/*.ts
+- server/routes/analyze.ts
+- src/App.tsx
+- src/lib/*.ts
+- src/pages/DashboardPage.tsx
 
 ## Required MCPs
 - context7
-- playwright
 
 ## Acceptance Criteria
-- dashboard shell renders
-- mobile layout is usable
+- analyzer can be run via API
+- parsed JSON is returned
 
 ## Validation
 ```bash
@@ -48,5 +49,5 @@ npm run build
 
 ## Repair Constraints
 - do not add files outside the allowlist
-- do not broaden scope to analyzer API, history, charts, or PWA files
-- stop if any file would require external repo edits
+- do not broaden scope to run controls, charts, history, comparison, or PWA work
+- stop if any change would require external repo edits

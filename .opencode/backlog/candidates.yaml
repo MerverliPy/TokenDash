@@ -99,13 +99,18 @@ candidates:
   - id: analyzer-api
     title: Wire analyzer execution through the backend
     priority: 80
-    status: pending
+    status: completed
     summary: Add analyze API contracts, spawn logic, and frontend API client wiring.
     depends_on:
       - frontend-shell
     allowed_files:
+      - .opencode/backlog/candidates.yaml
+      - .opencode/plans/current-phase.md
+      - server/workflow/phaseCatalog.ts
+      - server/index.ts
       - server/lib/*.ts
       - server/routes/analyze.ts
+      - src/App.tsx
       - src/lib/*.ts
       - src/pages/DashboardPage.tsx
     required_mcps:
