@@ -22,6 +22,10 @@ const historyListResponseSchema = z.object({
   entries: z.array(historyEntrySummarySchema),
 })
 
+const historySaveResponseSchema = z.object({
+  entry: historyEntrySummarySchema,
+})
+
 const historyEntryResponseSchema = z.object({
   entry: historyEntrySchema,
 })
@@ -84,7 +88,7 @@ export async function saveHistoryEntry(report: z.infer<typeof analyzeReportSchem
     throw new Error(getErrorMessage(payload, `History save failed with status ${response.status}.`))
   }
 
-  const parsedResponse = historyEntryResponseSchema.safeParse(payload)
+  const parsedResponse = historySaveResponseSchema.safeParse(payload)
 
   if (!parsedResponse.success) {
     throw new Error('History save response did not match the expected entry shape.')
