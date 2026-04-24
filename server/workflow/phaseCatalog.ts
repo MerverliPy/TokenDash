@@ -130,6 +130,28 @@ export const PHASE_CATALOG: Record<PhaseId, WorkflowPhaseDefinition> = {
     repairLimit: 3,
   },
 
+  'readme-refresh': {
+    id: 'readme-refresh',
+    title: 'Refresh README for the current local product',
+    goal: 'Update the README so it accurately describes TokenDash as a standalone local dashboard and local development entrypoint.',
+    dependsOn: ['run-controls-and-summary'],
+    allowedFiles: ['README.md'],
+    requiredMcps: [],
+    validations: [
+      { label: 'Workflow check', command: 'bash scripts/dev/workflow-check.sh' },
+      { label: 'Typecheck', command: 'npm run typecheck' },
+      { label: 'Build', command: 'npm run build' },
+    ],
+    acceptanceCriteria: [
+      'README describes current TokenDash behavior accurately',
+      'Local startup instructions match package.json',
+      'Current limitations are explicit',
+      'Project boundaries remain clear',
+    ],
+    outOfScope: ['Frontend feature changes', 'Backend API changes', 'PWA feature work'],
+    repairLimit: 2,
+  },
+
   'charts-and-detail-views': {
     id: 'charts-and-detail-views',
     title: 'Add charts and detail views',

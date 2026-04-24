@@ -1,20 +1,21 @@
 # Current Phase
 
 ## Phase
-- id: run-controls-and-summary
+- id: readme-refresh
 - status: completed
 
 ## Goal
-Add manual run controls, summary cards, and top-level metrics.
+Update the README so it accurately describes TokenDash as a standalone local dashboard and local development entrypoint.
 
 ## In Scope
-- add manual run controls inside the existing dashboard UI
-- add summary card components within the phase allowlist
-- surface top-level metrics from the existing analyzer response flow
-- keep all work bounded to the phase allowlist
+- rewrite README.md for people running TokenDash locally
+- describe current capabilities and current limitations only
+- document current startup commands and runtime dependencies
+- keep all work bounded to README.md
 
 ## Out Of Scope
-- backend analyzer contract changes beyond existing analyzer-api behavior
+- frontend feature changes
+- backend API changes
 - charts and detail views
 - local run history
 - comparison and warnings
@@ -22,25 +23,25 @@ Add manual run controls, summary cards, and top-level metrics.
 - token-tools cleanup and self-test integration
 
 ## Allowed Files
-- src/components/*.tsx
-- src/pages/DashboardPage.tsx
-- src/lib/*.ts
+- README.md
 
 ## Required MCPs
-- context7
-- playwright
+- none
 
 ## Acceptance Criteria
-- manual run works from UI
-- summary cards populate
+- README describes current TokenDash behavior accurately
+- local startup instructions match package.json
+- current limitations are explicit
+- project boundaries remain clear
 
 ## Validation
 ```bash
+bash scripts/dev/workflow-check.sh
 npm run typecheck
 npm run build
 ```
 
 ## Repair Constraints
-- do not add files outside the allowlist
-- do not broaden scope to charts, history, comparison, or PWA work
-- stop if any change would require backend route changes or external repo edits
+- do not edit files outside README.md
+- do not broaden scope to feature work or workflow runtime changes
+- stop if accuracy would require product code changes instead of documentation changes

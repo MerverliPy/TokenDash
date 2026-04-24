@@ -7,6 +7,7 @@ export const phaseIdSchema = z.enum([
   'frontend-shell',
   'analyzer-api',
   'run-controls-and-summary',
+  'readme-refresh',
   'charts-and-detail-views',
   'local-run-history',
   'comparison-and-warnings',

@@ -125,7 +125,7 @@ candidates:
   - id: run-controls-and-summary
     title: Add manual run controls and summary views
     priority: 75
-    status: pending
+    status: completed
     summary: Add run controls, summary cards, and top-level metrics.
     depends_on:
       - analyzer-api
@@ -140,6 +140,26 @@ candidates:
       - manual run works from UI
       - summary cards populate
     validation:
+      - npm run typecheck
+      - npm run build
+
+  - id: readme-refresh
+    title: Refresh README for the current local product
+    priority: 73
+    status: completed
+    summary: Update the README so it matches the current standalone local product and local development workflow.
+    depends_on:
+      - run-controls-and-summary
+    allowed_files:
+      - README.md
+    required_mcps: []
+    acceptance:
+      - README describes current TokenDash behavior accurately
+      - local startup instructions match package.json
+      - current limitations are explicit
+      - project boundaries are clear
+    validation:
+      - bash scripts/dev/workflow-check.sh
       - npm run typecheck
       - npm run build
 

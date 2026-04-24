@@ -7,6 +7,7 @@ const MCP_REQUIREMENTS: Record<PhaseId, McpName[]> = {
   'frontend-shell': ['context7', 'playwright'],
   'analyzer-api': ['context7'],
   'run-controls-and-summary': ['context7', 'playwright'],
+  'readme-refresh': [],
   'charts-and-detail-views': ['context7', 'playwright'],
   'local-run-history': ['playwright'],
   'comparison-and-warnings': ['playwright'],
