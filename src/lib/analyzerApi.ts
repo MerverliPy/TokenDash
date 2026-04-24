@@ -84,7 +84,7 @@ export type AnalyzeRequest = {
   repoRoot?: string
 }
 
-function getApiBaseUrl(): string {
+export function getApiBaseUrl(): string {
   if (typeof window === 'undefined') {
     return ''
   }

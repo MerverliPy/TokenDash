@@ -1,8 +1,10 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
+import RunHistoryPanel from '../components/RunHistoryPanel.js'
 import RunControls from '../components/RunControls.js'
 import SummaryCards from '../components/SummaryCards.js'
 import { runAnalyzer, type AnalyzeReport } from '../lib/analyzerApi.js'
+import { listHistoryEntries, loadHistoryEntry, saveHistoryEntry, type HistoryEntrySummary } from '../lib/historyApi.js'
 
 type LoadState = 'idle' | 'loading' | 'success' | 'error'
 
@@ -21,6 +23,28 @@ export default function DashboardPage() {
   const [report, setReport] = useState<AnalyzeReport | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [repoRoot, setRepoRoot] = useState('')
+  const [historyEntries, setHistoryEntries] = useState<HistoryEntrySummary[]>([])
+  const [historyErrorMessage, setHistoryErrorMessage] = useState<string | null>(null)
+  const [historyLoading, setHistoryLoading] = useState(true)
+  const [activeHistoryEntryId, setActiveHistoryEntryId] = useState<string | null>(null)
+
+  async function refreshHistoryEntries() {
+    setHistoryLoading(true)
+
+    try {
+      const nextEntries = await listHistoryEntries()
+      setHistoryEntries(nextEntries)
+      setHistoryErrorMessage(null)
+    } catch (error) {
+      setHistoryErrorMessage(error instanceof Error ? error.message : 'Unknown history error')
+    } finally {
+      setHistoryLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    void refreshHistoryEntries()
+  }, [])
 
   async function handleRun() {
     setStatus('loading')
@@ -29,9 +53,29 @@ export default function DashboardPage() {
     try {
       const nextReport = await runAnalyzer({ repoRoot: repoRoot.trim() || undefined })
       setReport(nextReport)
+      setActiveHistoryEntryId(null)
       setStatus('success')
+
+      const savedEntry = await saveHistoryEntry(nextReport)
+      setActiveHistoryEntryId(savedEntry.id)
+      await refreshHistoryEntries()
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : 'Unknown analyzer error')
+      setStatus('error')
+    }
+  }
+
+  async function handleOpenSavedRun(entryId: string) {
+    setErrorMessage(null)
+
+    try {
+      const entry = await loadHistoryEntry(entryId)
+      setReport(entry.report)
+      setRepoRoot(entry.report.repo.root)
+      setActiveHistoryEntryId(entry.id)
+      setStatus('success')
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : 'Unknown history load error')
       setStatus('error')
     }
   }
@@ -53,13 +97,13 @@ export default function DashboardPage() {
           <p className="eyebrow">TokenDash</p>
           <h1>Manual analyzer runs and summary cards are active for the current repo.</h1>
           <p className="hero__text">
-            This bounded phase adds an on-demand analyzer trigger and surfaces headline metrics from the parsed backend response.
+            This bounded phase adds local history persistence so completed analyzer runs can be reopened without triggering a fresh backend execution.
           </p>
 
           <ul className="pill-list" aria-label="Run controls and summary scope">
-            <li className="pill-list__item">Phase: run-controls-and-summary</li>
+            <li className="pill-list__item">Phase: local-run-history</li>
             <li className="pill-list__item">Route: POST /api/analyze</li>
-            <li className="pill-list__item">Output: summary metrics + parsed JSON</li>
+            <li className="pill-list__item">History: GET/POST /api/history</li>
           </ul>
         </div>
 
@@ -77,6 +121,10 @@ export default function DashboardPage() {
             <div>
               <dt>Last generated</dt>
               <dd>{report ? formatTimestamp(report.generated_at) : 'No run completed yet'}</dd>
+            </div>
+            <div>
+              <dt>Saved runs</dt>
+              <dd>{historyEntries.length}</dd>
             </div>
             <div>
               <dt>Reachability</dt>
@@ -132,6 +180,14 @@ export default function DashboardPage() {
         </section>
 
         <RunControls repoRoot={repoRoot} isRunning={status === 'loading'} onRepoRootChange={setRepoRoot} onRun={handleRun} />
+
+        <RunHistoryPanel
+          entries={historyEntries}
+          isLoading={historyLoading}
+          errorMessage={historyErrorMessage}
+          activeEntryId={activeHistoryEntryId}
+          onOpen={handleOpenSavedRun}
+        />
 
         <SummaryCards report={report} />
 

@@ -7,6 +7,7 @@ import { createBasicAuthMiddleware, getBasicAuthConfig } from './lib/basicAuth.j
 import { createDevCorsMiddleware, createRequestSecurityMiddleware } from './lib/requestSecurity.js'
 import { analyzeRouter } from './routes/analyze.js'
 import { healthRouter } from './routes/health.js'
+import { historyRouter } from './routes/history.js'
 import { workflowRouter } from './routes/workflow.js'
 import { getProjectRoot } from './workflow/runtimePaths.js'
 
@@ -26,6 +27,7 @@ app.use(createBasicAuthMiddleware(authConfig))
 
 app.use('/api', healthRouter)
 app.use('/api', analyzeRouter)
+app.use('/api', historyRouter)
 app.use('/api', workflowRouter)
 
 if (hasBuiltClient) {
