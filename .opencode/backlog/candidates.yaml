@@ -198,7 +198,7 @@ candidates:
   - id: charts-and-detail-views
     title: Add charts, model table, bundles, and workflow file views
     priority: 70
-    status: pending
+    status: completed
     summary: Add responsive charts and detailed data views.
     depends_on:
       - run-controls-and-summary

@@ -5,8 +5,10 @@ const analyzeBundleSchema = z
     id: z.string(),
     label: z.string(),
     file_count: z.number(),
+    size_bytes: z.number(),
     estimated_input_tokens: z.number(),
     estimated_output_tokens: z.number(),
+    files: z.array(z.string()),
   })
   .passthrough()
 
@@ -19,6 +21,30 @@ const analyzeModelSchema = z
     cost_usd: z.number().nullable(),
     notes: z.array(z.string()),
     assigned_bundle_id: z.string().nullable(),
+    assigned_bundle_label: z.string().nullable(),
+    sources: z.array(z.string()).optional(),
+    scan_files: z.array(z.string()).optional(),
+  })
+  .passthrough()
+
+const analyzeRoleEstimateSchema = z
+  .object({
+    role: z.string(),
+    bundle_id: z.string(),
+    file_count: z.number(),
+    estimated_input_tokens: z.number(),
+    estimated_output_tokens: z.number(),
+    files: z.array(z.string()),
+  })
+  .passthrough()
+
+const analyzeWorkflowFileSchema = z
+  .object({
+    path: z.string(),
+    kind: z.string(),
+    role: z.string().nullable(),
+    size_bytes: z.number(),
+    estimated_input_tokens: z.number(),
   })
   .passthrough()
 
@@ -43,6 +69,8 @@ export const analyzeReportSchema = z
       })
       .passthrough(),
     bundles: z.array(analyzeBundleSchema),
+    role_estimates: z.array(analyzeRoleEstimateSchema).optional().default([]),
+    workflow_files: z.array(analyzeWorkflowFileSchema).optional().default([]),
     models: z.array(analyzeModelSchema),
   })
   .passthrough()

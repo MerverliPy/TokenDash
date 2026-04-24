@@ -2,7 +2,7 @@
 
 ## Phase
 - id: charts-and-detail-views
-- status: in_progress
+- status: completed
 
 ## Goal
 Add responsive charts, model table, bundles, and workflow file views.
