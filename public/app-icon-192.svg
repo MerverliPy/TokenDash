@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="TokenDash icon">
+  <rect width="192" height="192" rx="42" fill="#08111f" />
+  <rect x="28" y="28" width="136" height="136" rx="30" fill="#132340" stroke="#4a73ff" stroke-width="8" />
+  <path d="M52 122h18V88H52zm35 0h18V70H87zm35 0h18V100h-18z" fill="#9fb7ff" />
+  <path d="M52 76l26-18 28 12 34-20" fill="none" stroke="#8be0ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="10" />
+  <circle cx="52" cy="76" r="7" fill="#8be0ff" />
+  <circle cx="78" cy="58" r="7" fill="#8be0ff" />
+  <circle cx="106" cy="70" r="7" fill="#8be0ff" />
+  <circle cx="140" cy="50" r="7" fill="#8be0ff" />
+</svg>

@@ -242,7 +242,7 @@ candidates:
   - id: comparison-and-warnings
     title: Add comparison and workflow warnings
     priority: 60
-    status: pending
+    status: completed
     summary: Compare saved runs and surface analyzer limitations and path drift.
     depends_on:
       - local-run-history
@@ -262,7 +262,7 @@ candidates:
   - id: pwa-setup
     title: Add PWA manifest, service worker, and install flows
     priority: 55
-    status: pending
+    status: completed
     summary: Make TokenDash installable with shell-only offline support.
     depends_on:
       - comparison-and-warnings
