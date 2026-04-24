@@ -52,6 +52,9 @@ const analyzeResponseSchema = z.object({
 })
 
 export type AnalyzeReport = z.infer<typeof analyzeReportSchema>
+export type AnalyzeRequest = {
+  repoRoot?: string
+}
 
 function getApiBaseUrl(): string {
   if (typeof window === 'undefined') {
@@ -76,13 +79,13 @@ function getErrorMessage(payload: unknown, fallback: string): string {
   return typeof error === 'string' && error.length > 0 ? error : fallback
 }
 
-export async function runAnalyzer(): Promise<AnalyzeReport> {
+export async function runAnalyzer(request: AnalyzeRequest = {}): Promise<AnalyzeReport> {
   const response = await fetch(`${getApiBaseUrl()}/api/analyze`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({}),
+    body: JSON.stringify(request),
   })
 
   const responseText = await response.text()

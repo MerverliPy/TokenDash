@@ -6,4 +6,5 @@ dist
 *.log
 coverage
 playwright-report
+.playwright-mcp/
 .DS_Store

@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
+import RunControls from '../components/RunControls.js'
+import SummaryCards from '../components/SummaryCards.js'
 import { runAnalyzer, type AnalyzeReport } from '../lib/analyzerApi.js'
 
-type LoadState = 'loading' | 'success' | 'error'
+type LoadState = 'idle' | 'loading' | 'success' | 'error'
 
 function formatTimestamp(value: string): string {
   const timestamp = new Date(value)
@@ -15,35 +17,24 @@ function formatTimestamp(value: string): string {
 }
 
 export default function DashboardPage() {
-  const [status, setStatus] = useState<LoadState>('loading')
+  const [status, setStatus] = useState<LoadState>('idle')
   const [report, setReport] = useState<AnalyzeReport | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [repoRoot, setRepoRoot] = useState('')
 
-  useEffect(() => {
-    let ignore = false
+  async function handleRun() {
+    setStatus('loading')
+    setErrorMessage(null)
 
-    async function loadReport() {
-      try {
-        const nextReport = await runAnalyzer()
-
-        if (!ignore) {
-          setReport(nextReport)
-          setStatus('success')
-        }
-      } catch (error) {
-        if (!ignore) {
-          setErrorMessage(error instanceof Error ? error.message : 'Unknown analyzer error')
-          setStatus('error')
-        }
-      }
+    try {
+      const nextReport = await runAnalyzer({ repoRoot: repoRoot.trim() || undefined })
+      setReport(nextReport)
+      setStatus('success')
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : 'Unknown analyzer error')
+      setStatus('error')
     }
-
-    void loadReport()
-
-    return () => {
-      ignore = true
-    }
-  }, [])
+  }
 
   const statusEntries = useMemo(() => {
     if (!report) {
@@ -60,15 +51,15 @@ export default function DashboardPage() {
       <header className="hero">
         <div className="hero__copy">
           <p className="eyebrow">TokenDash</p>
-          <h1>Analyzer API wiring is active for the current repo.</h1>
+          <h1>Manual analyzer runs and summary cards are active for the current repo.</h1>
           <p className="hero__text">
-            This bounded phase loads the analyzer report through the backend and exposes the parsed JSON in the dashboard shell.
+            This bounded phase adds an on-demand analyzer trigger and surfaces headline metrics from the parsed backend response.
           </p>
 
-          <ul className="pill-list" aria-label="Analyzer API scope">
-            <li className="pill-list__item">Phase: analyzer-api</li>
+          <ul className="pill-list" aria-label="Run controls and summary scope">
+            <li className="pill-list__item">Phase: run-controls-and-summary</li>
             <li className="pill-list__item">Route: POST /api/analyze</li>
-            <li className="pill-list__item">Output: parsed JSON report</li>
+            <li className="pill-list__item">Output: summary metrics + parsed JSON</li>
           </ul>
         </div>
 
@@ -80,8 +71,12 @@ export default function DashboardPage() {
               <dd>{status}</dd>
             </div>
             <div>
-              <dt>Repository</dt>
-              <dd>{report?.repo.root ?? '/home/calvin/TokenDash'}</dd>
+              <dt>Selected repo root</dt>
+              <dd>{repoRoot.trim() || report?.repo.root || '/home/calvin/TokenDash'}</dd>
+            </div>
+            <div>
+              <dt>Last generated</dt>
+              <dd>{report ? formatTimestamp(report.generated_at) : 'No run completed yet'}</dd>
             </div>
             <div>
               <dt>Reachability</dt>
@@ -94,9 +89,11 @@ export default function DashboardPage() {
       <main className="content-grid">
         <section className="panel">
           <div className="panel__header">
-            <h2>Analyzer response</h2>
-            <p>Minimal bounded frontend wiring for the analyzer-api phase.</p>
+            <h2>Run status</h2>
+            <p>Use the dashboard controls to trigger the bounded analyzer flow manually.</p>
           </div>
+
+          {status === 'idle' ? <p>No run started yet. Submit the form below to request a fresh analyzer report.</p> : null}
 
           {status === 'loading' ? <p>Loading analyzer report from the backend…</p> : null}
 
@@ -133,6 +130,10 @@ export default function DashboardPage() {
             </>
           ) : null}
         </section>
+
+        <RunControls repoRoot={repoRoot} isRunning={status === 'loading'} onRepoRootChange={setRepoRoot} onRun={handleRun} />
+
+        <SummaryCards report={report} />
 
         <section className="panel panel--accent">
           <div className="panel__header">

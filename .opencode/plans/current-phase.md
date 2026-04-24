@@ -1,22 +1,20 @@
 # Current Phase
 
 ## Phase
-- id: analyzer-api
+- id: run-controls-and-summary
 - status: completed
 
 ## Goal
-Wire analyzer execution through the backend and expose the parsed result to the frontend.
+Add manual run controls, summary cards, and top-level metrics.
 
 ## In Scope
-- reconcile analyzer-api workflow metadata across active workflow sources
-- add analyze API contracts and backend spawn logic
-- add the backend analyze route and mount it from `server/index.ts`
-- wire the frontend API client to call the analyze endpoint
-- render the dashboard analyzer flow from `src/App.tsx` and `src/pages/DashboardPage.tsx`
+- add manual run controls inside the existing dashboard UI
+- add summary card components within the phase allowlist
+- surface top-level metrics from the existing analyzer response flow
 - keep all work bounded to the phase allowlist
 
 ## Out Of Scope
-- manual run controls and summary cards beyond analyzer wiring
+- backend analyzer contract changes beyond existing analyzer-api behavior
 - charts and detail views
 - local run history
 - comparison and warnings
@@ -24,22 +22,17 @@ Wire analyzer execution through the backend and expose the parsed result to the 
 - token-tools cleanup and self-test integration
 
 ## Allowed Files
-- .opencode/backlog/candidates.yaml
-- .opencode/plans/current-phase.md
-- server/workflow/phaseCatalog.ts
-- server/index.ts
-- server/lib/*.ts
-- server/routes/analyze.ts
-- src/App.tsx
-- src/lib/*.ts
+- src/components/*.tsx
 - src/pages/DashboardPage.tsx
+- src/lib/*.ts
 
 ## Required MCPs
 - context7
+- playwright
 
 ## Acceptance Criteria
-- analyzer can be run via API
-- parsed JSON is returned
+- manual run works from UI
+- summary cards populate
 
 ## Validation
 ```bash
@@ -49,5 +42,5 @@ npm run build
 
 ## Repair Constraints
 - do not add files outside the allowlist
-- do not broaden scope to run controls, charts, history, comparison, or PWA work
-- stop if any change would require external repo edits
+- do not broaden scope to charts, history, comparison, or PWA work
+- stop if any change would require backend route changes or external repo edits
