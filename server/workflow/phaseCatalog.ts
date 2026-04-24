@@ -152,6 +152,45 @@ export const PHASE_CATALOG: Record<PhaseId, WorkflowPhaseDefinition> = {
     repairLimit: 2,
   },
 
+  'remote-access-and-basic-auth': {
+    id: 'remote-access-and-basic-auth',
+    title: 'Add stable Tailscale access with HTTP Basic Auth',
+    goal: 'Serve the built dashboard and API from one backend port with explicit host binding and env-backed HTTP Basic Auth for remote Tailscale access.',
+    dependsOn: ['readme-refresh'],
+    allowedFiles: [
+      '.opencode/backlog/candidates.yaml',
+      '.opencode/plans/current-phase.md',
+      'server/workflow/contracts.ts',
+      'server/workflow/phaseCatalog.ts',
+      'server/workflow/mcpPolicy.ts',
+      'server/index.ts',
+      'server/lib/*.ts',
+      'package.json',
+      'README.md',
+    ],
+    requiredMcps: ['context7', 'playwright'],
+    validations: [
+      { label: 'Workflow check', command: 'bash scripts/dev/workflow-check.sh' },
+      { label: 'Typecheck', command: 'npm run typecheck' },
+      { label: 'Build', command: 'npm run build' },
+    ],
+    acceptanceCriteria: [
+      'Backend binds to an explicit HOST value',
+      'Built frontend is served by Express on the same port as the API',
+      'Unauthenticated requests to / and /api/* return 401 when auth is enabled',
+      'Authenticated requests can load the dashboard and health route successfully',
+      'Unsafe cross-origin browser requests are rejected',
+      'README documents the Tailscale startup flow and auth env vars',
+    ],
+    outOfScope: [
+      'Vite dev-server remote HMR support',
+      'Session-based or form-based login UI',
+      'New dashboard features, charts, history, comparison, warnings, or PWA work',
+      'Analyzer feature changes beyond access control and hosting',
+    ],
+    repairLimit: 3,
+  },
+
   'charts-and-detail-views': {
     id: 'charts-and-detail-views',
     title: 'Add charts and detail views',

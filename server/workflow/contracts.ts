@@ -8,6 +8,7 @@ export const phaseIdSchema = z.enum([
   'analyzer-api',
   'run-controls-and-summary',
   'readme-refresh',
+  'remote-access-and-basic-auth',
   'charts-and-detail-views',
   'local-run-history',
   'comparison-and-warnings',

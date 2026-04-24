@@ -1,38 +1,49 @@
 # Current Phase
 
 ## Phase
-- id: readme-refresh
+- id: remote-access-and-basic-auth
 - status: completed
 
 ## Goal
-Update the README so it accurately describes TokenDash as a standalone local dashboard and local development entrypoint.
+Add a stable single-port remote access mode over Tailscale with env-backed HTTP Basic Auth and explicit backend host binding.
 
 ## In Scope
-- rewrite README.md for people running TokenDash locally
-- describe current capabilities and current limitations only
-- document current startup commands and runtime dependencies
-- keep all work bounded to README.md
+- update workflow metadata for the new bounded phase
+- add explicit HOST-based backend binding
+- add env-backed HTTP Basic Auth middleware for dashboard and API routes
+- serve the built frontend from Express on the same port as the API when dist/client exists
+- reject unsafe cross-origin browser requests in authenticated remote mode
+- add a production-style start script and document the Tailscale startup flow
 
 ## Out Of Scope
-- frontend feature changes
-- backend API changes
-- charts and detail views
-- local run history
-- comparison and warnings
-- PWA setup and mobile PWA polish
+- Vite dev-server remote HMR support
+- session-based or form-based login UI
+- new dashboard features, charts, history, comparison, warnings, or PWA work
+- analyzer feature changes beyond access control and hosting
 - token-tools cleanup and self-test integration
 
 ## Allowed Files
+- .opencode/backlog/candidates.yaml
+- .opencode/plans/current-phase.md
+- server/workflow/contracts.ts
+- server/workflow/phaseCatalog.ts
+- server/workflow/mcpPolicy.ts
+- server/index.ts
+- server/lib/*.ts
+- package.json
 - README.md
 
 ## Required MCPs
-- none
+- context7
+- playwright
 
 ## Acceptance Criteria
-- README describes current TokenDash behavior accurately
-- local startup instructions match package.json
-- current limitations are explicit
-- project boundaries remain clear
+- backend binds to an explicit HOST value
+- built frontend is served by Express on the same port as the API
+- unauthenticated requests to / and /api/* return 401 when auth is enabled
+- authenticated requests can load the dashboard and health route successfully
+- unsafe cross-origin browser requests are rejected
+- README documents the Tailscale startup flow and auth env vars
 
 ## Validation
 ```bash
@@ -42,6 +53,7 @@ npm run build
 ```
 
 ## Repair Constraints
-- do not edit files outside README.md
-- do not broaden scope to feature work or workflow runtime changes
-- stop if accuracy would require product code changes instead of documentation changes
+- do not edit files outside the allowlist above
+- keep auth v1 limited to env-backed HTTP Basic Auth only
+- prefer binding to a specific Tailscale HOST instead of broad interface exposure
+- stop if the implementation would require a new frontend login flow or broader remote-dev tooling

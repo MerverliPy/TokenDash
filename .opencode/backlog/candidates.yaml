@@ -163,6 +163,38 @@ candidates:
       - npm run typecheck
       - npm run build
 
+  - id: remote-access-and-basic-auth
+    title: Add stable Tailscale access with HTTP Basic Auth
+    priority: 72
+    status: completed
+    summary: Serve the built dashboard and API from one backend port with explicit host binding and env-backed HTTP Basic Auth for remote Tailscale access.
+    depends_on:
+      - readme-refresh
+    allowed_files:
+      - .opencode/backlog/candidates.yaml
+      - .opencode/plans/current-phase.md
+      - server/workflow/contracts.ts
+      - server/workflow/phaseCatalog.ts
+      - server/workflow/mcpPolicy.ts
+      - server/index.ts
+      - server/lib/*.ts
+      - package.json
+      - README.md
+    required_mcps:
+      - context7
+      - playwright
+    acceptance:
+      - backend binds to an explicit HOST value
+      - built frontend is served by Express on the same port as the API
+      - unauthenticated requests to / and /api/* return 401 when auth is enabled
+      - authenticated requests can load the dashboard and health route successfully
+      - unsafe cross-origin browser requests are rejected
+      - README documents the Tailscale startup flow and auth env vars
+    validation:
+      - bash scripts/dev/workflow-check.sh
+      - npm run typecheck
+      - npm run build
+
   - id: charts-and-detail-views
     title: Add charts, model table, bundles, and workflow file views
     priority: 70

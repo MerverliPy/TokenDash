@@ -8,6 +8,7 @@
     "dev:server": "tsx watch server/index.ts",
     "typecheck": "tsc --noEmit",
     "build": "tsc -p tsconfig.json && vite build",
+    "start": "node dist/server/index.js",
     "preview": "vite preview"
   },
   "dependencies": {

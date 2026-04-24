@@ -8,6 +8,7 @@ const MCP_REQUIREMENTS: Record<PhaseId, McpName[]> = {
   'analyzer-api': ['context7'],
   'run-controls-and-summary': ['context7', 'playwright'],
   'readme-refresh': [],
+  'remote-access-and-basic-auth': ['context7', 'playwright'],
   'charts-and-detail-views': ['context7', 'playwright'],
   'local-run-history': ['playwright'],
   'comparison-and-warnings': ['playwright'],

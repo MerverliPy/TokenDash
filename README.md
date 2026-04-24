@@ -58,14 +58,51 @@ Other useful commands:
 ```bash
 npm run typecheck
 npm run build
+npm run start
 ```
 
 The backend and frontend are started separately right now.
 
+## Remote Access over Tailscale
+
+TokenDash now supports a stable single-port remote mode for Tailscale access.
+
+Recommended flow:
+
+1. Build the frontend and backend:
+
+```bash
+npm run build
+```
+
+2. Start the backend bound to your exact Tailscale IP with HTTP Basic Auth enabled:
+
+```bash
+HOST=<your-tailscale-ip> \
+PORT=3001 \
+TOKENDASH_AUTH_USER=<username> \
+TOKENDASH_AUTH_PASSWORD=<password> \
+npm run start
+```
+
+3. Open TokenDash remotely at:
+
+```text
+http://<your-tailscale-ip>:3001/
+```
+
+Notes:
+
+- Prefer binding `HOST` to the specific Tailscale IP instead of `0.0.0.0`
+- When `TOKENDASH_AUTH_USER` and `TOKENDASH_AUTH_PASSWORD` are both set, TokenDash requires HTTP Basic Auth for the dashboard and API routes
+- The backend rejects unsafe cross-origin browser requests in authenticated mode
+- Remote stable access uses the built Express server, not the Vite dev server
+
 ## Runtime Requirements
 
+- Backend default host: `127.0.0.1`
 - Backend default port: `3001`
-- The frontend talks to the backend on port `3001`
+- In built remote mode, the frontend and API are served from the same backend origin and port
 - The Vite dev server usually starts on `5173`, but may use the next available port if `5173` is already occupied
 - The analyzer script is expected at:
   - `/home/calvin/session-artifacts-2026-04-22/token-tools/agent-workflow-token-consumption.mjs`
@@ -75,9 +112,12 @@ If the analyzer script is missing, analyze requests will fail.
 ## Troubleshooting
 
 - Check backend health at `http://localhost:3001/api/health`
+- In remote mode, use `http://<your-tailscale-ip>:3001/api/health`
 - Confirm the analyzer path in the health response if analyze requests fail
 - Make sure both the frontend and backend dev servers are running
 - If Vite selects a different port, open the URL printed by `npm run dev`
+- If remote requests return `401`, confirm both Basic Auth env vars are set and your browser/client sent credentials
+- If remote requests return `403` on unsafe methods, confirm the request originated from the same TokenDash URL
 
 ## Project Boundaries
 

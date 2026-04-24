@@ -1,36 +1,40 @@
+import fs from 'node:fs'
+import path from 'node:path'
+
 import express from 'express'
 
+import { createBasicAuthMiddleware, getBasicAuthConfig } from './lib/basicAuth.js'
+import { createDevCorsMiddleware, createRequestSecurityMiddleware } from './lib/requestSecurity.js'
 import { analyzeRouter } from './routes/analyze.js'
 import { healthRouter } from './routes/health.js'
 import { workflowRouter } from './routes/workflow.js'
+import { getProjectRoot } from './workflow/runtimePaths.js'
 
 const app = express()
+const host = process.env.HOST || '127.0.0.1'
 const port = Number(process.env.PORT || 3001)
+const authConfig = getBasicAuthConfig()
+const projectRoot = getProjectRoot()
+const clientDistRoot = path.join(projectRoot, 'dist', 'client')
+const clientIndexPath = path.join(clientDistRoot, 'index.html')
+const hasBuiltClient = fs.existsSync(clientIndexPath)
 
 app.use(express.json())
-
-app.use((req, res, next) => {
-  const origin = req.headers.origin
-
-  if (origin) {
-    res.setHeader('Access-Control-Allow-Origin', origin)
-    res.setHeader('Vary', 'Origin')
-  }
-
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
-
-  if (req.method === 'OPTIONS') {
-    res.sendStatus(204)
-    return
-  }
-
-  next()
-})
+app.use(createRequestSecurityMiddleware({ enforceSameOrigin: authConfig.enabled }))
+app.use(createDevCorsMiddleware(!authConfig.enabled))
+app.use(createBasicAuthMiddleware(authConfig))
 
 app.use('/api', healthRouter)
 app.use('/api', analyzeRouter)
 app.use('/api', workflowRouter)
+
+if (hasBuiltClient) {
+  app.use(express.static(clientDistRoot))
+
+  app.get(/^(?!\/api(?:\/|$)).*/, (_req, res) => {
+    res.sendFile(clientIndexPath)
+  })
+}
 
 app.use((_req, res) => {
   res.status(404).json({ error: 'Not found' })
@@ -41,6 +45,12 @@ app.use((error: unknown, _req: express.Request, res: express.Response, _next: ex
   res.status(500).json({ error: message })
 })
 
-app.listen(port, () => {
-  console.log(`TokenDash backend listening on http://localhost:${port}`)
+app.listen(port, host, () => {
+  const bindUrl = `http://${host}:${port}`
+  const authStatus = authConfig.enabled ? 'enabled' : 'disabled'
+  const uiStatus = hasBuiltClient ? 'built frontend served by Express' : 'API-only mode (dist/client missing)'
+
+  console.log(`TokenDash backend listening on ${bindUrl}`)
+  console.log(`HTTP Basic Auth: ${authStatus}`)
+  console.log(`Frontend mode: ${uiStatus}`)
 })
