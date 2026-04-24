@@ -212,7 +212,14 @@ export const PHASE_CATALOG: Record<PhaseId, WorkflowPhaseDefinition> = {
     title: 'Add local run history',
     goal: 'Persist and reopen saved runs locally.',
     dependsOn: ['charts-and-detail-views'],
-    allowedFiles: ['server/lib/*.ts', 'server/routes/history.ts', 'src/components/*.tsx', 'src/lib/*.ts'],
+    allowedFiles: [
+      'server/index.ts',
+      'server/lib/*.ts',
+      'server/routes/history.ts',
+      'src/components/*.tsx',
+      'src/lib/*.ts',
+      'src/pages/DashboardPage.tsx',
+    ],
     requiredMcps: ['playwright'],
     validations: [
       { label: 'Typecheck', command: 'npm run typecheck' },

@@ -29,13 +29,26 @@ const phaseId = extractLineValue(currentPhase, '- id:');
 const phaseStatus = extractLineValue(currentPhase, '- status:');
 const backlogHasPhase = phaseId ? backlog.includes(`- id: ${phaseId}`) : false;
 
+function getNextActions(status) {
+  switch (status) {
+    case 'pending':
+      return ['/run-phase'];
+    case 'in_progress':
+      return ['/run-phase', '/validate-phase'];
+    case 'completed':
+      return ['/next-phase', '/finish-phase'];
+    default:
+      return [];
+  }
+}
+
 const result = {
   root: rootDir,
   current_phase_id: phaseId,
   current_phase_status: phaseStatus,
   backlog_has_phase: backlogHasPhase,
   drift_detected: !phaseId || !phaseStatus || !backlogHasPhase,
-  next_actions: phaseStatus === 'in_progress' ? ['/run-phase', '/validate-phase'] : ['/next-phase'],
+  next_actions: getNextActions(phaseStatus),
 };
 
 console.log(JSON.stringify(result, null, 2));

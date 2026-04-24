@@ -29,6 +29,11 @@ These instructions apply only to TokenDash internal workflow files, workflow run
 - do not claim a phase is validated if required MCP evidence is missing
 - record MCP evidence in diagnostics
 
+## Validation Exceptions
+
+- `.opencode/plans/current-phase.md` is workflow state and is exempt from product phase scope-drift checks
+- when validating a product phase, workflow-only reconciliation changes in `.opencode/backlog/candidates.yaml`, `scripts/dev/phase-status-json.mjs`, and `server/workflow/phaseCatalog.ts` should be reported as notes unless they change product behavior or broaden the active phase implementation scope
+
 ## Agent Boundaries
 
 - orchestrator selects and advances bounded phases but does not implement product code

@@ -219,15 +219,17 @@ candidates:
   - id: local-run-history
     title: Add local run history persistence
     priority: 65
-    status: pending
+    status: completed
     summary: Persist runs locally and reopen them later.
     depends_on:
       - charts-and-detail-views
     allowed_files:
+      - server/index.ts
       - server/lib/*.ts
       - server/routes/history.ts
       - src/components/*.tsx
       - src/lib/*.ts
+      - src/pages/DashboardPage.tsx
     required_mcps:
       - playwright
     acceptance:

@@ -1,37 +1,39 @@
 # Current Phase
 
 ## Phase
-- id: charts-and-detail-views
+- id: local-run-history
 - status: completed
 
 ## Goal
-Add responsive charts, model table, bundles, and workflow file views.
+Persist runs locally and reopen them later.
 
 ## In Scope
-- add responsive chart rendering for existing analyzer output
-- add detailed model, bundle, and workflow file views using existing frontend data flows
-- keep new detail tables and panels readable on mobile layouts
-- limit the phase to frontend display and styling work inside the allowlist
+- add local persistence support for saved runs
+- mount the history route and add supporting server-side storage helpers inside the allowlist
+- add UI support to list and reopen saved runs through the existing dashboard page state
+- keep the phase limited to local history persistence and retrieval work
 
 ## Out Of Scope
-- local run history persistence
-- comparison and warnings
+- comparison across saved runs
+- workflow warnings or path-drift messaging
 - PWA setup or mobile PWA polish
-- backend API changes
 - token-tools cleanup and self-test integration
+- unrelated backend refactors or new analyzer behavior
 
 ## Allowed Files
+- server/index.ts
+- server/lib/*.ts
+- server/routes/history.ts
 - src/components/*.tsx
 - src/lib/*.ts
-- src/styles.css
+- src/pages/DashboardPage.tsx
 
 ## Required MCPs
-- context7
 - playwright
 
 ## Acceptance Criteria
-- charts render
-- tables are readable on mobile
+- runs save locally
+- runs reopen from history
 
 ## Validation
 ```bash
@@ -41,5 +43,5 @@ npm run build
 
 ## Repair Constraints
 - do not edit files outside the allowlist above
-- keep the phase limited to charting and detailed read-only views of existing analyzer data
-- stop if implementation would require new backend routes, persistence, or future-phase comparison/history behavior
+- keep the phase limited to local persistence and reopening saved runs
+- stop if implementation would require comparison features, warning surfaces, PWA work, or external repo changes
