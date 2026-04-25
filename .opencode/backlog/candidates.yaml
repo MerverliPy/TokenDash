@@ -306,7 +306,7 @@ candidates:
   - id: token-tools-path-cleanup
     title: Fix moved token-tools path references
     priority: 45
-    status: pending
+    status: completed
     summary: Update moved token-tools docs and self-test references outside TokenDash.
     depends_on:
       - mobile-pwa-polish

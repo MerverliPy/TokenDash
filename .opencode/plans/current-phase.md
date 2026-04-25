@@ -1,42 +1,41 @@
 # Current Phase
 
 ## Phase
-- id: mobile-pwa-polish
+- id: token-tools-path-cleanup
 - status: completed
 
 ## Goal
-Improve the installed mobile PWA layout and touch usability.
+Update moved token-tools docs and self-test path references outside TokenDash.
 
 ## In Scope
-- improve touch targets for the installed mobile PWA
-- refine the standalone mobile layout
-- improve small-screen readability
-- resolve critical overflow issues in the installed experience
+- correct moved token-tools path references in the allowed external files
+- update the token-tools self-test to point at the moved analyzer path
+- keep the phase limited to the explicit external token-tools allowlist
 
 ## Out Of Scope
-- token-tools cleanup
-- self-test integration
-- backend changes or analyzer behavior changes
-- broader dashboard redesign beyond mobile PWA polish
+- TokenDash frontend or backend changes
+- self-test integration inside TokenDash
+- workflow metadata changes beyond required state tracking
+- any changes outside the explicit token-tools allowlist
 
 ## Allowed Files
-- src/**
-- README.md
+- /home/calvin/session-artifacts-2026-04-22/token-tools/agent-workflow-token-consumption-explained.md
+- /home/calvin/session-artifacts-2026-04-22/token-tools/agent-workflow-token-consumption-selftest.mjs
+- /home/calvin/session-artifacts-2026-04-22/token-tools/agent-workflow-token-consumption-selftest-explained.md
 
 ## Required MCPs
-- playwright
+- none
 
 ## Acceptance Criteria
-- standalone mobile layout is usable
-- no critical overflow issues
+- moved paths are corrected
+- self-test points to the moved analyzer
 
 ## Validation
 ```bash
-npm run typecheck
-npm run build
+node /home/calvin/session-artifacts-2026-04-22/token-tools/agent-workflow-token-consumption-selftest.mjs
 ```
 
 ## Repair Constraints
 - do not edit files outside the allowlist above
-- keep the phase limited to mobile PWA touch usability, standalone layout, and small-screen readability
-- stop if the work would require token-tools cleanup, self-test integration, backend changes, or broader product behavior changes
+- keep the phase limited to moved token-tools docs and self-test path repair
+- stop if the work would require TokenDash product changes, broader external repo cleanup, or self-test integration work inside TokenDash
