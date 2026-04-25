@@ -95,15 +95,15 @@ export default function DashboardPage() {
       <header className="hero">
         <div className="hero__copy">
           <p className="eyebrow">TokenDash</p>
-          <h1>Manual analyzer runs and summary cards are active for the current repo.</h1>
+          <h1>Analyzer runs, saved history, and installable dashboard views are ready for the current repo.</h1>
           <p className="hero__text">
-            This bounded phase adds local history persistence so completed analyzer runs can be reopened without triggering a fresh backend execution.
+            The installed shell stays readable on small screens, keeps touch actions easy to reach, and still makes it clear that fresh analysis depends on the local backend.
           </p>
 
           <ul className="pill-list" aria-label="Run controls and summary scope">
-            <li className="pill-list__item">Phase: local-run-history</li>
-            <li className="pill-list__item">Route: POST /api/analyze</li>
-            <li className="pill-list__item">History: GET/POST /api/history</li>
+            <li className="pill-list__item">PWA: installable shell</li>
+            <li className="pill-list__item">Run API: POST /api/analyze</li>
+            <li className="pill-list__item">History API: GET/POST /api/history</li>
           </ul>
         </div>
 
@@ -162,8 +162,8 @@ export default function DashboardPage() {
               </ul>
 
               {statusEntries.length > 0 ? (
-                <div style={{ marginTop: '1rem' }}>
-                  <p className="eyebrow" style={{ marginBottom: '0.5rem' }}>
+                <div className="status-stack">
+                  <p className="eyebrow status-stack__label">
                     Status buckets
                   </p>
                   <ul className="checklist">
@@ -198,17 +198,7 @@ export default function DashboardPage() {
           </div>
 
           {status === 'success' && report ? (
-            <pre
-              style={{
-                margin: 0,
-                padding: '1rem',
-                borderRadius: '1rem',
-                background: 'rgba(9, 15, 29, 0.92)',
-                overflowX: 'auto',
-                whiteSpace: 'pre-wrap',
-                wordBreak: 'break-word',
-              }}
-            >
+            <pre className="json-panel">
               {rawJson}
             </pre>
           ) : (

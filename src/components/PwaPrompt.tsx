@@ -134,50 +134,31 @@ export default function PwaPrompt() {
   }
 
   return (
-    <section
-      aria-label="PWA install status"
-      style={{
-        position: 'sticky',
-        top: '1rem',
-        zIndex: 20,
-        margin: '1rem auto 0',
-        width: 'min(1120px, calc(100% - 2rem))',
-        border: '1px solid rgba(139, 180, 255, 0.2)',
-        borderRadius: '1rem',
-        padding: '1rem',
-        background: 'rgba(8, 17, 31, 0.92)',
-        boxShadow: '0 18px 40px rgba(3, 7, 18, 0.28)',
-      }}
-    >
-      <div style={{ display: 'grid', gap: '0.85rem' }}>
+    <section aria-label="PWA install status" className="pwa-banner">
+      <div className="pwa-banner__content">
         <div>
-          <p style={{ margin: 0, fontSize: '0.8rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#9fb7ff' }}>PWA shell</p>
-          <h2 style={{ margin: '0.2rem 0 0', fontSize: '1.1rem' }}>Installable offline shell</h2>
+          <p className="pwa-banner__eyebrow">PWA shell</p>
+          <h2 className="pwa-banner__title">Installable offline shell</h2>
         </div>
 
-        {registrationError ? <p style={{ margin: 0 }}>Service worker registration failed: {registrationError}</p> : null}
-        {offlineReady ? <p style={{ margin: 0 }}>The dashboard shell is cached for offline viewing. Fresh analyzer runs still require the local backend.</p> : null}
-        {needRefresh ? <p style={{ margin: 0 }}>A refreshed app shell is ready. Reload to swap to the latest cached assets.</p> : null}
-        {isInstalled ? <p style={{ margin: 0 }}>TokenDash is running as an installed app or standalone window on this device.</p> : null}
+        {registrationError ? <p className="pwa-banner__message">Service worker registration failed: {registrationError}</p> : null}
+        {offlineReady ? (
+          <p className="pwa-banner__message">The dashboard shell is cached for offline viewing. Fresh analyzer runs still require the local backend.</p>
+        ) : null}
+        {needRefresh ? <p className="pwa-banner__message">A refreshed app shell is ready. Reload to swap to the latest cached assets.</p> : null}
+        {isInstalled ? <p className="pwa-banner__message">TokenDash is running as an installed app or standalone window on this device.</p> : null}
         {!isInstalled && !deferredPrompt && !registrationError ? (
-          <p style={{ margin: 0 }}>If your browser does not expose the install prompt automatically, use its install menu once the shell is cached.</p>
+          <p className="pwa-banner__message">If your browser does not expose the install prompt automatically, use its install menu once the shell is cached.</p>
         ) : null}
 
-        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+        <div className="button-row button-row--stack-mobile pwa-banner__actions">
           <button
             type="button"
             onClick={() => {
               void handleInstallClick()
             }}
             disabled={!deferredPrompt || isInstalled}
-            style={{
-              border: '1px solid rgba(139, 180, 255, 0.3)',
-              borderRadius: '999px',
-              padding: '0.75rem 1rem',
-              background: !deferredPrompt || isInstalled ? 'rgba(15, 23, 42, 0.7)' : 'rgba(74, 115, 255, 0.24)',
-              color: !deferredPrompt || isInstalled ? 'rgba(236, 242, 255, 0.6)' : '#ecf2ff',
-              cursor: !deferredPrompt || isInstalled ? 'not-allowed' : 'pointer',
-            }}
+            className="touch-button touch-button--secondary"
           >
             {isInstalled ? 'Installed' : deferredPrompt ? 'Install app shell' : 'Install prompt unavailable'}
           </button>
@@ -186,14 +167,7 @@ export default function PwaPrompt() {
             type="button"
             onClick={() => window.location.reload()}
             disabled={!needRefresh}
-            style={{
-              border: '1px solid rgba(139, 180, 255, 0.22)',
-              borderRadius: '999px',
-              padding: '0.75rem 1rem',
-              background: needRefresh ? 'rgba(16, 185, 129, 0.18)' : 'rgba(15, 23, 42, 0.7)',
-              color: needRefresh ? '#ecfdf5' : 'rgba(236, 242, 255, 0.6)',
-              cursor: needRefresh ? 'pointer' : 'not-allowed',
-            }}
+            className="touch-button touch-button--success"
           >
             Reload cached shell
           </button>

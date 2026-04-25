@@ -18,10 +18,10 @@ export default function RunControls({ repoRoot, isRunning, onRepoRootChange, onR
           event.preventDefault()
           onRun()
         }}
-        style={{ display: 'grid', gap: '0.85rem' }}
+        className="control-form"
       >
-        <label style={{ display: 'grid', gap: '0.4rem' }}>
-          <span className="eyebrow" style={{ letterSpacing: '0.08em' }}>
+        <label className="control-form__field">
+          <span className="eyebrow control-form__label">
             Repo root override
           </span>
           <input
@@ -30,34 +30,20 @@ export default function RunControls({ repoRoot, isRunning, onRepoRootChange, onR
             onChange={(event) => onRepoRootChange(event.target.value)}
             placeholder="/home/calvin/TokenDash"
             spellCheck={false}
-            style={{
-              width: '100%',
-              borderRadius: '0.9rem',
-              border: '1px solid rgba(139, 180, 255, 0.24)',
-              background: 'rgba(9, 15, 29, 0.92)',
-              color: '#ecf2ff',
-              padding: '0.85rem 0.95rem',
-            }}
+            className="touch-input"
           />
         </label>
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center' }}>
+        <div className="button-row button-row--stack-mobile">
           <button
             type="submit"
             disabled={isRunning}
-            style={{
-              border: '1px solid rgba(139, 180, 255, 0.35)',
-              borderRadius: '999px',
-              padding: '0.8rem 1rem',
-              background: isRunning ? 'rgba(74, 115, 255, 0.2)' : 'rgba(74, 115, 255, 0.32)',
-              color: '#ecf2ff',
-              cursor: isRunning ? 'wait' : 'pointer',
-            }}
+            className="touch-button touch-button--primary"
           >
             {isRunning ? 'Running analyzer…' : 'Run analyzer'}
           </button>
 
-          <p style={{ margin: 0, color: '#c8d6f8' }}>The dashboard uses the existing `POST /api/analyze` backend route.</p>
+          <p className="helper-text">The dashboard uses the existing `POST /api/analyze` backend route.</p>
         </div>
       </form>
     </section>

@@ -17,6 +17,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  min-height: 100dvh;
   background: #0b1020;
 }
 
@@ -33,12 +34,13 @@ select {
 
 #root {
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .app-shell {
   width: min(1120px, 100%);
   margin: 0 auto;
-  padding: 1rem;
+  padding: calc(1rem + env(safe-area-inset-top, 0px)) calc(1rem + env(safe-area-inset-right, 0px)) calc(1.25rem + env(safe-area-inset-bottom, 0px)) calc(1rem + env(safe-area-inset-left, 0px));
 }
 
 .hero,
@@ -59,6 +61,10 @@ select {
   padding: 1.25rem;
 }
 
+.hero__copy {
+  min-width: 0;
+}
+
 .eyebrow,
 .metric-card__label,
 .status-card__badge {
@@ -75,9 +81,10 @@ select {
 }
 
 .hero h1 {
-  font-size: clamp(2rem, 7vw, 3.75rem);
-  line-height: 1.05;
+  font-size: clamp(1.75rem, 7vw, 3.75rem);
+  line-height: 1.08;
   margin-top: 0.35rem;
+  overflow-wrap: anywhere;
 }
 
 .hero__text,
@@ -140,6 +147,191 @@ select {
   display: grid;
   gap: 1rem;
   margin-top: 1rem;
+}
+
+.helper-text {
+  margin: 0;
+  color: #c8d6f8;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.control-form {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.control-form__field {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.control-form__label {
+  letter-spacing: 0.08em;
+}
+
+.touch-input {
+  width: 100%;
+  min-height: 3rem;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(139, 180, 255, 0.24);
+  background: rgba(9, 15, 29, 0.92);
+  color: #ecf2ff;
+  padding: 0.85rem 0.95rem;
+}
+
+.touch-input:focus-visible,
+.touch-button:focus-visible {
+  outline: 2px solid rgba(139, 180, 255, 0.85);
+  outline-offset: 2px;
+}
+
+.touch-button {
+  min-height: 2.95rem;
+  border-radius: 999px;
+  padding: 0.8rem 1rem;
+  color: #ecf2ff;
+  transition: background-color 140ms ease, border-color 140ms ease, opacity 140ms ease;
+}
+
+.touch-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+}
+
+.touch-button:not(:disabled) {
+  cursor: pointer;
+}
+
+.touch-button--primary {
+  border: 1px solid rgba(139, 180, 255, 0.35);
+  background: rgba(74, 115, 255, 0.32);
+}
+
+.touch-button--primary:disabled {
+  background: rgba(74, 115, 255, 0.2);
+}
+
+.touch-button--secondary {
+  border: 1px solid rgba(139, 180, 255, 0.3);
+  background: rgba(74, 115, 255, 0.24);
+}
+
+.touch-button--success {
+  border: 1px solid rgba(110, 231, 183, 0.24);
+  background: rgba(16, 185, 129, 0.18);
+}
+
+.touch-button--success:disabled {
+  background: rgba(15, 23, 42, 0.7);
+}
+
+.history-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.history-entry {
+  border: 1px solid rgba(139, 180, 255, 0.18);
+  border-radius: 1rem;
+  padding: 1rem;
+  background: rgba(9, 15, 29, 0.72);
+  display: grid;
+  gap: 0.7rem;
+}
+
+.history-entry--active {
+  border-color: rgba(139, 180, 255, 0.45);
+  background: rgba(74, 115, 255, 0.12);
+}
+
+.history-entry__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: start;
+}
+
+.history-entry__label,
+.history-entry__stats {
+  margin: 0;
+}
+
+.history-entry__title {
+  margin: 0;
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+
+.history-entry__button {
+  flex-shrink: 0;
+}
+
+.status-stack {
+  margin-top: 1rem;
+}
+
+.status-stack__label {
+  margin-bottom: 0.5rem;
+}
+
+.json-panel {
+  margin: 0;
+  padding: 1rem;
+  border-radius: 1rem;
+  background: rgba(9, 15, 29, 0.92);
+  overflow: auto;
+  max-height: min(24rem, 65vh);
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.pwa-banner {
+  position: sticky;
+  top: calc(0.75rem + env(safe-area-inset-top, 0px));
+  z-index: 20;
+  margin: 0.75rem auto 0;
+  width: min(1120px, calc(100% - 1rem));
+  border: 1px solid rgba(139, 180, 255, 0.2);
+  border-radius: 1rem;
+  padding: 1rem;
+  background: rgba(8, 17, 31, 0.92);
+  box-shadow: 0 18px 40px rgba(3, 7, 18, 0.28);
+}
+
+.pwa-banner__content {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.pwa-banner__eyebrow {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9fb7ff;
+}
+
+.pwa-banner__title {
+  margin: 0.2rem 0 0;
+  font-size: 1.1rem;
+}
+
+.pwa-banner__message {
+  margin: 0;
+  color: #dce7ff;
+}
+
+.pwa-banner__actions {
+  align-items: stretch;
 }
 
 .content-grid > * {
@@ -388,6 +580,57 @@ select {
 }
 
 @media (max-width: 719px) {
+  .app-shell {
+    padding-top: calc(0.75rem + env(safe-area-inset-top, 0px));
+  }
+
+  .hero,
+  .panel,
+  .status-card,
+  .metric-card,
+  .detail-card {
+    border-radius: 1.2rem;
+  }
+
+  .hero {
+    padding: 1rem;
+  }
+
+  .pill-list {
+    gap: 0.55rem;
+  }
+
+  .pill-list__item {
+    padding: 0.5rem 0.8rem;
+  }
+
+  .button-row--stack-mobile {
+    display: grid;
+    align-items: stretch;
+  }
+
+  .button-row--stack-mobile > * {
+    width: 100%;
+  }
+
+  .history-entry__button,
+  .touch-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .pwa-banner {
+    top: calc(0.5rem + env(safe-area-inset-top, 0px));
+    width: calc(100% - 1rem);
+    padding: 0.9rem;
+  }
+
+  .json-panel {
+    max-height: min(20rem, 55vh);
+    padding: 0.85rem;
+    font-size: 0.74rem;
+  }
+
   .bar-chart__copy {
     flex-direction: column;
     align-items: start;
