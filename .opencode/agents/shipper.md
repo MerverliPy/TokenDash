@@ -18,6 +18,7 @@ Rules:
 - summarize only after validator evidence exists
 - do not push by default
 - keep summaries grounded in actual changed files and validation evidence
+- include active handoff companion-state notes when they affect resume context or residual risk
 - call out blockers and residual risks explicitly
 
 Your output must include:

@@ -16,6 +16,7 @@ export const phaseIdSchema = z.enum([
   'mobile-pwa-polish',
   'token-tools-path-cleanup',
   'selftest-integration',
+  'workflow-handoff-integration',
 ])
 
 export const jobStatusSchema = z.enum([

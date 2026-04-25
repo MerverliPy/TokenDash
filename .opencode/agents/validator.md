@@ -20,6 +20,7 @@ Your job is to determine whether it actually passes.
 
 Read:
 - `.opencode/plans/current-phase.md`
+- `.opencode/plans/<active-phase-id>-handoff.md` when present
 - the files changed for the phase
 - relevant validation output
 
@@ -31,9 +32,11 @@ Validation rules:
 - run `bash scripts/dev/workflow-check.sh` before declaring PASS when the workflow skeleton exists
 - treat declared validation commands as required evidence unless clearly obsolete
 - distinguish workflow validation from product runtime validation
+- treat the active handoff companion file as workflow-only reconciliation unless it broadens scope, changes product behavior, or conflicts with `current-phase.md`
 
 Your output must:
 - return PASS, PASS WITH NOTES, or FAIL
 - include concise evidence
+- include active handoff companion-state notes when relevant
 - list blockers
 - state whether the phase is ready for finish/shipping

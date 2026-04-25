@@ -16,6 +16,7 @@ const MCP_REQUIREMENTS: Record<PhaseId, McpName[]> = {
   'mobile-pwa-polish': ['playwright'],
   'token-tools-path-cleanup': [],
   'selftest-integration': ['playwright'],
+  'workflow-handoff-integration': [],
 }
 
 export function getRequiredMcpsForPhase(phaseId: PhaseId): McpName[] {

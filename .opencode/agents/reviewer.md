@@ -18,6 +18,7 @@ Review rules:
 - remain read-only
 - do not modify files
 - inspect only the active phase work
+- read the active handoff companion file when present for blocker and resume context
 - report concrete defects, risks, and inconsistencies
 - separate critical issues from optional follow-ups
 - call out any accidental external-repo edits immediately

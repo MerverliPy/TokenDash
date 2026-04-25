@@ -301,8 +301,8 @@ export const PHASE_CATALOG: Record<PhaseId, WorkflowPhaseDefinition> = {
     id: 'selftest-integration',
     title: 'Add self-test integration',
     goal: 'Add a dev-only self-test route and UI entrypoint.',
-    dependsOn: ['token-tools-path-cleanup'],
-    allowedFiles: ['server/lib/*.ts', 'server/routes/selftest.ts', 'src/components/*.tsx', 'src/pages/DashboardPage.tsx'],
+    dependsOn: ['token-tools-path-cleanup', 'workflow-handoff-integration'],
+    allowedFiles: ['server/index.ts', 'server/lib/*.ts', 'server/routes/selftest.ts', 'src/components/*.tsx', 'src/pages/DashboardPage.tsx'],
     requiredMcps: ['playwright'],
     validations: [
       { label: 'Typecheck', command: 'npm run typecheck' },
@@ -311,6 +311,38 @@ export const PHASE_CATALOG: Record<PhaseId, WorkflowPhaseDefinition> = {
     acceptanceCriteria: ['Self-test can be triggered from TokenDash'],
     outOfScope: ['Core analyzer views'],
     repairLimit: 3,
+  },
+
+  'workflow-handoff-integration': {
+    id: 'workflow-handoff-integration',
+    title: 'Integrate active handoff files into workflow state',
+    goal: 'Make active handoff files part of the workflow companion state so validation and automation treat workflow reconciliation correctly.',
+    dependsOn: ['token-tools-path-cleanup'],
+    allowedFiles: [
+      '.opencode/backlog/candidates.yaml',
+      '.opencode/AGENTS.md',
+      '.opencode/agents/*.md',
+      '.opencode/commands/*.md',
+      '.opencode/plans/current-phase.md',
+      '.opencode/plans/*-handoff.md',
+      'scripts/dev/*',
+      'server/workflow/contracts.ts',
+      'server/workflow/mcpPolicy.ts',
+      'server/workflow/phaseCatalog.ts',
+    ],
+    requiredMcps: [],
+    validations: [
+      { label: 'Workflow check', command: 'bash scripts/dev/workflow-check.sh' },
+      { label: 'Phase status JSON', command: 'node scripts/dev/phase-status-json.mjs' },
+    ],
+    acceptanceCriteria: [
+      'Active handoff files are treated as workflow companion state',
+      'Workflow status inspection reports active handoff metadata when present',
+      'Workflow validation tolerates handoff reconciliation files as notes instead of scope drift',
+      'Command and agent instructions consistently reference the active handoff companion flow',
+    ],
+    outOfScope: ['TokenDash product feature implementation', 'Self-test backend or UI product changes'],
+    repairLimit: 2,
   },
 }
 

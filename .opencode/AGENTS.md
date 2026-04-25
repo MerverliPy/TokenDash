@@ -7,6 +7,7 @@ These instructions apply only to TokenDash internal workflow files, workflow run
 ## Workflow Invariants
 
 - `.opencode/plans/current-phase.md` is the authoritative active-phase file
+- `.opencode/plans/<phase-id>-handoff.md` is optional companion state for the active phase's execution progress, blockers, and resume context
 - `.opencode/backlog/candidates.yaml` is the durable candidate source of truth
 - each phase must declare:
   - allowed files
@@ -32,7 +33,9 @@ These instructions apply only to TokenDash internal workflow files, workflow run
 ## Validation Exceptions
 
 - `.opencode/plans/current-phase.md` is workflow state and is exempt from product phase scope-drift checks
+- `.opencode/plans/*-handoff.md` files are workflow companion state and are workflow-only reconciliation artifacts during validation
 - when validating a product phase, workflow-only reconciliation changes in `.opencode/backlog/candidates.yaml`, `scripts/dev/phase-status-json.mjs`, and `server/workflow/phaseCatalog.ts` should be reported as notes unless they change product behavior or broaden the active phase implementation scope
+- when present, the active handoff companion file for the current phase should be reported as a note instead of scope drift unless it changes product behavior, broadens scope, or conflicts with `current-phase.md`
 
 ## Agent Boundaries
 
@@ -41,6 +44,7 @@ These instructions apply only to TokenDash internal workflow files, workflow run
 - validator validates but does not implement fixes
 - reviewer remains read-only
 - shipper summarizes only after evidence is present
+- `current-phase.md` stays authoritative for phase identity and scope, while the active handoff companion file carries execution-only status and resume context
 
 ## Repair Rules
 

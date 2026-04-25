@@ -328,7 +328,9 @@ candidates:
     summary: Add a dev-only self-test route and UI hook.
     depends_on:
       - token-tools-path-cleanup
+      - workflow-handoff-integration
     allowed_files:
+      - server/index.ts
       - server/lib/*.ts
       - server/routes/selftest.ts
       - src/components/*.tsx
@@ -340,3 +342,31 @@ candidates:
     validation:
       - npm run typecheck
       - npm run build
+
+  - id: workflow-handoff-integration
+    title: Integrate active handoff files into workflow state
+    priority: 39
+    status: completed
+    summary: Make active handoff files part of the workflow companion state so validation and automation treat workflow reconciliation correctly.
+    depends_on:
+      - token-tools-path-cleanup
+    allowed_files:
+      - .opencode/backlog/candidates.yaml
+      - .opencode/AGENTS.md
+      - .opencode/agents/*.md
+      - .opencode/commands/*.md
+      - .opencode/plans/current-phase.md
+      - .opencode/plans/*-handoff.md
+      - scripts/dev/*
+      - server/workflow/contracts.ts
+      - server/workflow/mcpPolicy.ts
+      - server/workflow/phaseCatalog.ts
+    required_mcps: []
+    acceptance:
+      - active handoff files are treated as workflow companion state
+      - workflow status inspection reports active handoff metadata when present
+      - workflow validation tolerates handoff reconciliation files as notes instead of scope drift
+      - command and agent instructions consistently reference the active handoff companion flow
+    validation:
+      - bash scripts/dev/workflow-check.sh
+      - node scripts/dev/phase-status-json.mjs
