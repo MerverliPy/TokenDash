@@ -324,7 +324,7 @@ candidates:
   - id: selftest-integration
     title: Add self-test integration to TokenDash
     priority: 40
-    status: pending
+    status: completed
     summary: Add a dev-only self-test route and UI hook.
     depends_on:
       - token-tools-path-cleanup

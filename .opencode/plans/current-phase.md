@@ -1,52 +1,44 @@
 # Current Phase
 
 ## Phase
-- id: workflow-handoff-integration
+- id: selftest-integration
 - status: completed
 
 ## Goal
-Make active handoff files part of the workflow companion state so validation and automation treat workflow reconciliation correctly.
+Add a dev-only self-test route and UI hook.
 
 ## In Scope
-- classify active handoff files as workflow companion state
-- update workflow scripts to expose active handoff metadata
-- update workflow instructions so command and agent behavior references the handoff companion flow consistently
-- keep all work limited to the explicit workflow allowlist for this phase
+- add a backend helper to run the external self-test script
+- add a dev-only self-test API route and mount it in the backend
+- add a dashboard trigger and result view for self-test execution
+- keep the phase limited to the explicit product allowlist below
 
 ## Out Of Scope
-- TokenDash product feature implementation
-- self-test backend or UI product changes
+- analyzer feature changes beyond the self-test entrypoint
+- workflow metadata changes unrelated to this product phase
 - token-tools external file cleanup
-- any changes outside the explicit workflow allowlist below
+- any changes outside the explicit self-test integration allowlist below
 
 ## Allowed Files
-- .opencode/backlog/candidates.yaml
-- .opencode/AGENTS.md
-- .opencode/agents/*.md
-- .opencode/commands/*.md
-- .opencode/plans/current-phase.md
-- .opencode/plans/*-handoff.md
-- scripts/dev/*
-- server/workflow/contracts.ts
-- server/workflow/mcpPolicy.ts
-- server/workflow/phaseCatalog.ts
+- server/index.ts
+- server/lib/*.ts
+- server/routes/selftest.ts
+- src/components/*.tsx
+- src/pages/DashboardPage.tsx
 
 ## Required MCPs
-- none
+- playwright
 
 ## Acceptance Criteria
-- active handoff files are treated as workflow companion state
-- workflow status inspection reports active handoff metadata when present
-- workflow validation tolerates handoff reconciliation files as notes instead of scope drift
-- command and agent instructions consistently reference the active handoff companion flow
+- self-test can be triggered from TokenDash
 
 ## Validation
 ```bash
-bash scripts/dev/workflow-check.sh
-node scripts/dev/phase-status-json.mjs
+npm run typecheck
+npm run build
 ```
 
 ## Repair Constraints
 - do not edit files outside the allowlist above
-- keep the phase limited to workflow companion-state integration and validation tolerance
-- stop if the work would require TokenDash product implementation or broader non-workflow refactors
+- keep the phase limited to dev-only self-test integration
+- stop if the work would require broader analyzer, workflow-engine, or non-allowlisted product changes
